@@ -1,4 +1,4 @@
-AC_INIT(sprot,0.1.0,bert@superstring.nl)
+AC_INIT(sprot,1.0.4,bert@superstring.nl)
 AC_CONFIG_SRCDIR(src/sprot.cc)
 AC_PREREQ(2.59)
 AM_INIT_AUTOMAKE
