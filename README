@@ -1,0 +1,25 @@
+BUILDING
+========
+
+To build sprot, you need to have:
+* CppUnit 1.12.1 or newer
+* Boost 1.35 or newer
+
+Then, to build it, type:
+
+$ ./configure
+$ make
+$ make check
+$ sudo make install
+
+That's all there is to it.
+
+SUBMITTING PATCHES
+==================
+
+You're obviously more than welcome to contribute to this
+program, but there are a few things to keep in mind.
+
+1) Keep the ChangeLog file up-to-date. The easy way to do
+   this from emacs is using hotkey 'C-x 4 a' or the verbatimg
+   command 'add-change-log-entry-other-window'.

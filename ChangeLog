@@ -1,6 +1,4 @@
-2008-09-29  Bert van der Weerd  <bert@superstring.nl>
+2009-08-23  Bert van der Weerd  <bert@superstring.nl>
 
-	* configure.ac: bumped up version number to 0.1.15
-
-	* General cleanup and moved all windows specific files to the win32 folder
+	* initial: Project started.
 

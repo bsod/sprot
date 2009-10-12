@@ -1,6 +1,3 @@
-#ifndef INCLUDED_SYSDEP_H
-#define INCLUDED_SYSDEP_H
-
 /*
  * Copyright 2009 Bert van der Weerd <bert@superstring.nl>
  *
@@ -19,15 +16,23 @@
  *
  */
 
-#include <string>
+#include "sysdep.h"
+
+#include <windows.h>
+#include <shlobj.h>
+#include <shlwapi.h>
 #include <fstream>
 
-class sysdep_t
+// this function opens "$(My Documents)/sprot/sprot.cfg"
+void sysdep_t::open_config_file(std::ifstream& ifs)
 {
- public:
-  void open_config_file(std::ifstream& ifs);
-};
+  TCHAR szPath[MAX_PATH];
 
-extern sysdep_t sysdep;
+  if (SUCCEEDED(SHGetFolderPath(NULL, CSIDL_PERSONAL, NULL, 0, szPath)))
+    {
+      if (PathAppend(szPath, TEXT("sprot")) == FALSE) return;
+      if (PathAppend(szPath, TEXT("sprot.cfg")) == FALSE) return;
 
-#endif /* INCLUDED_SYSDEP_H */
+      ifs.open(szPath);		// trust the right open() is called depending on the TCHAR typedef
+    }
+}

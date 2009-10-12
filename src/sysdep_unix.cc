@@ -1,6 +1,3 @@
-#ifndef INCLUDED_SYSDEP_H
-#define INCLUDED_SYSDEP_H
-
 /*
  * Copyright 2009 Bert van der Weerd <bert@superstring.nl>
  *
@@ -19,15 +16,18 @@
  *
  */
 
-#include <string>
-#include <fstream>
 
-class sysdep_t
+#include "sysdep.h"
+
+#include <stdlib.h>
+
+// this function opens "~/.sprot/sprot.cfg"
+void sysdep_t::open_config_file(std::ifstream& ifs)
 {
- public:
-  void open_config_file(std::ifstream& ifs);
-};
+  std::string path = "";
 
-extern sysdep_t sysdep;
+  path += getenv("HOME");
+  path += "/.sprot/sprot.cfg";
 
-#endif /* INCLUDED_SYSDEP_H */
+  ifs.open(path.c_str());
+}

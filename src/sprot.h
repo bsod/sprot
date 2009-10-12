@@ -1,79 +1,98 @@
 #ifndef INCLUDED_SPROT_H
 #define INCLUDED_SPROT_H
 
+/*
+ * Copyright 2009 Bert van der Weerd <bert@superstring.nl>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+# include <config.h>
 #endif
 
-#include <exception>
-#include <string>
 #include <vector>
-#include <map>
+#include <string>
 
-
-//
-// these classes define the template datafile structure
-//
-
-
-struct sprot_template { int line; std::string name; std::string content; std::string flavor; };
-struct sprot_file     { int line; std::string name; std::string content; 
-  bool binary; std::string alias; };
-struct sprot_project  { int line; std::string name; std::vector<sprot_file> files; };
-
-struct sprot_snippet  { int line; std::string name; std::string content; };
-struct sprot_blob     { int line; std::string name; std::string content; };
-
-
-//
-// The main class that defines what goes in a sprot template file and
-// the basic parse() and generate() functions to use it.
-//
-
-struct sprot_datafile 
+class sprot
 {
-  std::vector<sprot_template> templates;
-  std::vector<sprot_project>  projects;
-  std::vector<sprot_snippet>  snippets;
-  std::vector<sprot_blob>     blobs;
+public:
+  sprot(const std::vector<std::string>& input_files);
+  ~sprot();
 
-  // variables and content substitution
-  std::map<std::string,std::string> var;
-
-  struct parse_error : public std::exception 
-  {
-    int line;
-    std::string msg;
-    
-    parse_error(const std::string& msg, const int line = 0)
-    {
-      this->line = line;
-      this->msg = msg;
-    }
-
-    // needed because we derive from std::exception
-    // http://www.cplusplus.com/doc/tutorial/exceptions.html
-    virtual ~parse_error() throw() {}
-
-    virtual const char* what() const throw();
-  };
-  
-
-  // parse the template file
-  void parse(const std::string& filename);
-
-  // generate files and projects
-  void generate_template(const sprot_template& template_data, const std::string& file_name);
-  void generate_project(const sprot_project& project_data, const std::string& project_name);
-
+  int run();
 
 private:
+  const std::vector<std::string>& input_files;
+};
 
-public:
-  void subst_init(const std::string& name);
-  std::string subst(const std::string& str);
+class sprot_files
+{
+ public:
+  sprot_files(const std::string& flavor, const std::vector<std::string>& files,
+	      const std::string& template_file);
+  ~sprot_files();
+
+  int run();
+
+ private:
+};
+
+class sprot_projects
+{
+ public:
+  sprot_projects(const std::string& project_name, const std::vector<std::string>& names,
+		 const std::string& template_file);
+  ~sprot_projects();
+
+  int run();
+ private:
+};
+
+class sprot_list
+{
+ public:
+  sprot_list(const std::string& template_file);
+  ~sprot_list();
+
+  int run();
+ private:
+};
+
+class sprot_write_binary
+{
+ public:
+  sprot_write_binary(const std::vector<std::string>& filenames);
+  ~sprot_write_binary();
+
+  int run();
+ private:
+};
+
+class sprot_set
+{
+ public:
+  sprot_set(const std::string& set_name, const std::vector<std::string>& names,
+	    const std::string& template_file);
+  ~sprot_set();
+
+  int run();
+ private:
 };
 
 
-
 #endif /* INCLUDED_SPROT_H */
+

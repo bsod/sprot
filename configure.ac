@@ -1,13 +1,18 @@
-AC_INIT(sprot,0.1.17,bert@superstring.nl)
-AC_CONFIG_SRCDIR(src/sprot.cpp)
+AC_INIT(sprot,0.1.0,bert@superstring.nl)
+AC_CONFIG_SRCDIR(src/sprot.cc)
 AC_PREREQ(2.59)
 AM_INIT_AUTOMAKE
+AM_PATH_CPPUNIT(1.12.1)
 AC_CONFIG_HEADERS(config.h)
 
 # -- the tests go here
 AC_PROG_CC
 AC_PROG_CXX
 AC_STDC_HEADERS
+
+AX_BOOST_BASE([1.35])
+AC_SUBST(BOOST_CPPFLAGS)
+AC_SUBST(BOOST_LDFLAGS)
 
 AC_CONFIG_FILES(Makefile src/Makefile)
 AC_OUTPUT
