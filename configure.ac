@@ -6,7 +6,6 @@ AM_PATH_CPPUNIT(1.12.1)
 AC_CONFIG_HEADERS(config.h)
 
 # -- the tests go here
-AC_PROG_CC
 AC_PROG_CXX
 AC_STDC_HEADERS
 
