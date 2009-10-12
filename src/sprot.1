@@ -1,0 +1,315 @@
+.TH sprot 1 "September 8, 2008"
+
+.SH NAME
+sprot \- Generate files and projects from a standard template file.
+
+.SH SYNOPSIS
+.B sprot
+[
+.B -vh
+] [
+.B -t
+.I template_file
+] [
+.B -f
+.I flavor
+] filename ...
+.PP 
+.B sprot
+.B -p
+.I project
+[
+.B -t
+.I template_file
+] project_name ...
+.PP 
+.B sprot 
+.B -l
+[
+.B -t
+.I template_file
+]
+.PP 
+.B sprot 
+.B -b 
+filename ...
+.PP
+.B sprot
+.B -s
+.I snippet_name
+[
+.B -t
+.I template_file
+] project_name ...
+
+.SH DESCRIPTION
+
+This program is used to generate individual files and entire projects from a template
+file. The advantage of using templates to generate files and projects
+is that it encourages a more uniform source code layout, and it
+obviously saves a lot of work when starting a new project.
+
+.SH OPTIONS
+.TP
+-b, --write-binary
+All input files are written as a stream of hexadecimal bytes onto
+standard output, so that they can be placed into the template file
+either as binary files or binary snippets. This mode of operation does
+not use or require any template file to be present. See the section BINARIES AND BLOBS for a more 
+detailed explanation.
+.TP
+-f FLAVOR, --flavor=FLAVOR
+Specify which flavor of template to select for a certain extension, so
+you can have a .c file with a gnu flavor or a bsd flavor or whatever
+you like.
+.TP
+-h,--help
+Display the commandline help and exit sucessfully.
+.TP
+-l,--list
+Display contents of the template file. This command does not generate any
+files or projects, even if you specify them.
+.TP
+-p PROJECT, --project=PROJECT
+Select PROJECT from the template file and generate the project under
+the name of FILE, in a directory FILE.
+.TP
+-s SNIPPET, --snippet=SNIPPET
+Prints the SNIPPET on stdout. Very useful if you have snippets for common
+code situations. A good shell alias would be: 
+.B alias snippet='sprot -s'
+.TP
+-t FILE, --template-file=FILE
+Use FILE as the template file. The default template file is ~/.default.sprot.
+.TP
+-v,--version
+This displays the version of the program. Here in the manpage there
+is more room for explaining what an option does.
+
+.SH BASIC INTRODUCTION
+Your default template file containing all the templates and projects
+is located in your home folder: ~/.default.sprot
+
+The template file consist basically of a list of files seperated by
+special commands, that will be used as template when you create an
+individual file, or a set of files as part of a project.
+
+First, how do templates work. You define a template like so:
+
+.nf
+%template .txt%
+This is something that will be placed in the template every time
+you create a new .txt file.
+%end%
+.fi
+
+Now when you invoke sprot like so: 
+.B sprot test.txt
+
+It will create the test.txt file with the above mentioned content. It
+does this by looking at the file extension given at the commandline
+and search the matching template for it (in this case .txt).
+
+Now, we obviously want to have templates for a lot of different file
+extensions, for example .h, .c, .cpp and .s.
+
+So:
+
+.nf
+%template .h%
+
+#ifndef INCLUDED_$(NAME)_H
+#define INCLUDED_$(NAME)_H
+
+#endif /* INCLUDED_$(NAME)_H
+
+%template .c%
+
+#include <stdio.h>
+int main(int argc,char* argv[])
+{
+  printf("Hello, world\\n");
+  return 0;
+}
+
+%end%
+.fi
+
+This should be pretty self-explanatory, but take a good look at the
+section for the .h header files, it uses a variable
+.I $(NAME)
+which specifies the name of the file (without extension) in
+uppercase. There are many such variables includeing 
+.I $(name)
+which does the same but makes the name lowercase. The complete list of
+variables is listed in in the VARABLES section below.
+
+.SH FILE AND PROJECT STATEMENTS
+One thing is very important, these statements must be at the beginning of the line, so
+the '%' character must be the first character on the line.
+
+If you specify a directory name as part of the %file% or %binary%
+statements, it will be automatically created, for example:
+.B src/subdir/$(name).cpp
+will create the .cpp file in that directory.
+
+.TP
+%template .EXTENSION [FLAVOR]%
+Declares the start of a template for the files with extension .extension. 
+Optionally you can specify a 'flavor' for the extension,
+so you can have .c files where the flavor is 'gnu' or 'bsd' for
+example. You specify the flavor with the -f commandline switch.
+.TP
+%project NAME%
+Declares that the next, following %file% and %binary% statements belong to this project called NAME
+.TP
+%file [snippet IDENT] NAME%
+Declares file NAME part of the %project% declared above it.
+.TP
+%binary [blob IDENT] NAME%
+Declares that this binary file should be generated as part of the
+project declared above it. See the section BINARIES AND BLOBS for more information.
+.TP
+%snippet IDENT%
+Declares a multiline snippet.
+.TP
+%blob IDENT%
+Declares a multiline blob.
+.TP
+%end%
+Signifies that no further lines from the above declared %template%, %file%, %binary%, %snippet% or %blob% will
+be included as part of the template.
+
+.SH VARIABLES
+
+There are two kinds of variables, built-in variables and user-defined
+variables. Variables can be used both in the %file% or %template% body
+and also in the %file% and %binary% name, like so:
+
+.nf
+%project foo%
+%file src/$(name).c%
+/* this is file $(name).c created in year $(year) */
+%end%
+.fi
+
+
+The following variables are built-in:
+.TP
+$(name)
+The name of the file or project, without extension or path.
+.TP
+$(NAME)
+The name of the file or project, transformed to uppercase.
+.TP
+$(day)
+Current day of the month.
+.TP
+$(month)
+Current month, as a full word ('January').
+.TP
+$(month_number)
+The current month, as a number.
+.TP
+$(year)
+The current year.
+
+.PP
+User variables are defined in the template file as follows:
+
+.nf
+%variable author Bert van der Weerd%
+%variable email bert@superstring.nl%
+%template .c%
+/* Copyright $(year) $(author) <$(email)> */
+%end%
+.fi
+
+Because the template file is parsed in its entirely before file
+generation takes place, there is no need to define a variable before
+it is used. If you specify the same variable twice, the last of the
+two values is used.
+
+.SH SNIPPETS
+
+A snippet is a piece of code that has an identifier and that can be
+viewed as a multi-line variable. It looks like this:
+
+.nf
+%snippet mysnippet%
+This is just a snippet and the year is $(year).
+%end%
+.fi
+
+It can be called in %file% and %template% blocks as a normal variable,
+in the case of the example as
+.B $(mysnippet)
+
+Another important feature of sprot is the using a 'snippet alias' in
+the definition of a %file% command.
+
+.nf
+%file snippet mysnippet test.cpp%
+.fi
+
+This will use snippet 'mysnippet' as the contents of the entire file,
+with variable substitution inside that snippet carried out as
+usual. Any contents of the %file% that would follow is ignored.
+
+.SH BINARIES AND BLOBS
+
+You can generate binary files with sprot, but there is no such thing
+as variable substitution with binary files. An example:
+
+.nf
+%blob my_blob%
+01 02 03 ff fd 00
+%end%
+
+%binary file.bin%
+00 20 30
+40 12 fe
+%end%
+
+%binary blob my_blob my_blob.bin%
+.fi
+
+This example defines one blob (my_blob) and two binary files (file.bin and my_blob.bin).
+Binaries and blobs are written as a multiline sequence
+of hexadecimal bytes. You can enter this sequence manually, but
+usually you will generate the hexadecimal dump of an existing binary
+with the command:
+
+.nf
+sprot -b MyIcon.ico > tmp
+emacs ~/.default.sprot tmp
+.fi
+
+and use your editor to copy the contents of the temporary file into
+the sprot template file.
+
+As variable substitution does not work in binary files the only way to
+get the contents of a blob out is to use the 'blob alias' syntax in
+the %binary% command, as shown in the last line of the example
+(my_blob.bin).
+
+.SH BUGS
+
+* If you reference a blob or snippet in a %binary% or %file% alias and
+this blob or snippet does not exist, an empty file is generated and no
+warning or error is given.
+
+.SH TODO
+
+* A numerical prefix in projects could specify passes in the code
+generation stage, and a new command %zip filename.zip% could be used
+to unpack larger directory structures. Combining the two features would
+enable one to unpack a skeleton zipfile and put generated files into 
+that tree at a later pass.
+
+* Sets. A new thing to generate would be 'sets' of files, for example
+the generation of a .h and .cpp file when creating a class skeleton. This
+should be flavored as usual, to have tc/gnu/bsd type of class skeletons.
+
+* Multiple extensions, extension aliasses. Most pressing example would be
+to have .cc files as alias for .cpp templates.
