@@ -3,6 +3,9 @@
 **/.*~
 **/*~
 
+*.tar.gz
+sprot.pre-git
+
 Makefile
 config.h
 config.log
