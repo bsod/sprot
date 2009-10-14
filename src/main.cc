@@ -38,6 +38,7 @@ main(int argc,char* argv[])
       using std::vector;
       using std::cout;
       using std::endl;
+      using std::ifstream;
 
       //
       // parse commandline
@@ -58,7 +59,7 @@ main(int argc,char* argv[])
       // config file
       options_description config("Configuration");
       config.add_options()
-	("template-file,t", "select which template file to use")
+	("template-file,t", value< string >(), "select which template file to use")
 	;
       
       // Hidden options, will be allowed both on command line and
@@ -87,9 +88,12 @@ main(int argc,char* argv[])
 
       // open config file with more default options
       {
-	std::ifstream ifs;
+	ifstream ifs;
+
 	sysdep.open_config_file(ifs);
-	store(parse_config_file(ifs, config_file_options), vm);
+
+	if (ifs.is_open())
+	  store(parse_config_file(ifs, config_file_options), vm);
       }
 
       notify(vm);
@@ -102,44 +106,55 @@ main(int argc,char* argv[])
 
       if (vm.count("help")) 
 	{
-	  cout << "Generate text source files and projects from a standard template.\n"
-	       << "\n"
-	       << "Usage: sprot [-f FLAVOR] FILE...\n"
-	       << "       sprot -l\n"
-	       << "       sprot -p PROJECT NAME...\n"
-	       << "       sprot -b FILE...\n"
-	       << "       sprot -s SET NAME...\n"
-	       << "\n"
-	       << visible 
-	       << "\n"
-	       << "Please report bugs and ideas to <" << PACKAGE_BUGREPORT << ">.\n";
+	  cout << 
+	    "Generate text source files and projects from a standard template.\n"
+	    "\n"
+	    "Usage: sprot [-f FLAVOR] FILE...\n"
+	    "       sprot -l\n"
+	    "       sprot -p PROJECT NAME...\n"
+	    "       sprot -b FILE...\n"
+	    "       sprot -s SET NAME...\n"
+	    "\n"
+	       << visible << 
+	    "\n"
+	    "Please report bugs and ideas to <" << PACKAGE_BUGREPORT << ">.\n";
+
 	  return 0;
 	}
       
       if (vm.count("version")) 
 	{
-	  cout << argv[0] << " ("<<PACKAGE_NAME<<") "<<PACKAGE_VERSION<<"\n\n";
-	  cout << 
+	  cout << argv[0] << " (" << PACKAGE_NAME << ") " << PACKAGE_VERSION << "\n"
+	    "\n"
 	    "Copyright 2009 Bert van der Weerd <" << PACKAGE_BUGREPORT << ">\n"
-	    
+	    "\n"
 	    "This is free software; see the source for copying conditions.  There is NO\n"
 	    "warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
 	    ;
+
 	  return 0;
 	}
 
+      if (vm.count("list"))
+	{
+	  sprot_list instance(vm["template-file"].as<string>());
+
+	  return instance.run();
+	}
 
 
-
+      /*
       if (vm.count("input-file"))
 	{
           sprot instance(vm["input-file"].as< vector<string> >());
 	  return instance.run();
 	}
       else
-	std::cout << "No input files given." << std::endl;
+	cout << "No input files given." << endl;
+      */
 
     }
+
   catch (std::exception& e)
     {
       std::cerr 
@@ -147,14 +162,14 @@ main(int argc,char* argv[])
       	<< "Error: " << e.what() << " (std::exception)" << std::endl;
       return 1;
     }
+
   catch (...)
     {
       std::cerr 
       	<< std::endl << std::endl
-      	<< "Error: " << "UNHANDLED EXCEPTION" << " (exception type unknown)" << std::endl;
+      	<< "Error: " << "Unhandled exception of unknown type." << std::endl;
       return 1;
     }
-
 
   return 0;
 }

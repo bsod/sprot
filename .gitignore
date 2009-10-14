@@ -25,5 +25,5 @@ src/*.in
 src/.deps/*
 src/Makefile
 src/*.o
-src/sprot1
 src/sprot
+src/sprotcheck

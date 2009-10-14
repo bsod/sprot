@@ -27,36 +27,24 @@
 #include <vector>
 #include <string>
 
-class sprot
-{
-public:
-  sprot(const std::vector<std::string>& input_files);
-  ~sprot();
-
-  int run();
-
-private:
-  const std::vector<std::string>& input_files;
-};
-
-class sprot_files
+class sprot_file
 {
  public:
-  sprot_files(const std::string& flavor, const std::vector<std::string>& files,
+  sprot_file(const std::string& flavor, const std::vector<std::string>& files,
 	      const std::string& template_file);
-  ~sprot_files();
+  ~sprot_file();
 
   int run();
 
  private:
 };
 
-class sprot_projects
+class sprot_project
 {
  public:
-  sprot_projects(const std::string& project_name, const std::vector<std::string>& names,
+  sprot_project(const std::string& project_name, const std::vector<std::string>& names,
 		 const std::string& template_file);
-  ~sprot_projects();
+  ~sprot_project();
 
   int run();
  private:
@@ -65,11 +53,15 @@ class sprot_projects
 class sprot_list
 {
  public:
+
   sprot_list(const std::string& template_file);
   ~sprot_list();
 
   int run();
+
  private:
+
+  std::string filename;
 };
 
 class sprot_write_binary

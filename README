@@ -22,4 +22,8 @@ program, but there are a few things to keep in mind.
 
 1) Keep the ChangeLog file up-to-date. The easy way to do
    this from emacs is using hotkey 'C-x 4 a' or the verbatimg
-   command 'add-change-log-entry-other-window'.
+   command 'add-change-log-entry-other-window'. To have emacs use 
+   your desired name and email, place the following in your ~/.emacs
+   
+   (setq user-full-name "Bert van der Weerd")
+   (setq user-mail-address "bert@superstring.nl")

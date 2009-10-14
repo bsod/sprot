@@ -38,25 +38,22 @@
 namespace ublas = boost::numeric::ublas;
 
 
-sprot::sprot(const std::vector<std::string>& input_files)
-  : input_files(input_files)
+//
+// sprot_list - List contents of template file
+//
+
+sprot_list::sprot_list(const std::string& template_file)
+  : filename(template_file)
 {
 }
 
-sprot::~sprot()
+sprot_list::~sprot_list()
 {
 }
 
-int sprot::run()
+int sprot_list::run()
 {
-  // boost lexical_cast
-  assert(boost::lexical_cast<std::string>(123) == "123");
-  assert(boost::lexical_cast<int>("123") == 123);
-      
-  for (std::vector<std::string>::const_iterator i = input_files.begin(); 
-       i != input_files.end(); i++)
-    std::cout << *i << std::endl;
+  std::cout << "Listing contents of sprot template file `" << filename << "'" << std::endl;
 
   return 0;
 }
-
