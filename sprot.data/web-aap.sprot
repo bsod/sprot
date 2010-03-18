@@ -1,0 +1,179 @@
+#
+# web.sprot - templates for web development
+#
+# projects:
+#
+# (html|php[.mysql])[.jquery].(bsod|aap)
+#
+# templates: 
+#
+# .html .php 
+# flavors: (bsod|aap)[.jquery]
+# .php
+# flavors: (bsod|aap)[.jquery][.mysql]
+#
+
+
+
+%project html.bsod%
+%binary _bsod.ico favicon.ico%
+%file prj-index-html-bsod index.html%
+%file prj-style-css-bsod style.css%
+%file _robots.txt robots.txt%
+
+%project html.aap%
+%binary _aap.ico favicon.ico%
+%file prj-index-html-aap index.html%
+%file prj-style-css-aap style.css%
+%file _robots.txt robots.txt%
+
+
+%project html.jquery.bsod%
+%binary _bsod.ico favicon.ico%
+%file prj-index-html-bsod-jquery index.html%
+%file prj-style-css-bsod style.css%
+%file _jquery.js jquery.js%
+%file _robots.txt robots.txt%
+
+%project html.jquery.aap%
+%binary _aap.ico favicon.ico%
+%file prj-index-html-aap-jquery index.html%
+%file prj-style-css-aap style.css%
+%file _jquery.js jquery.js%
+%file _robots.txt robots.txt%
+
+%project php.bsod%
+%binary _bsod.ico favicon.ico%
+%file _robots.txt robots.txt%
+%file prj-index-php-bsod index.php
+
+%project php.mysql.bsod%
+%project php.aap%
+%project php.mysql.aap%
+%project php.jquery.bsod%
+%project php.mysql.jquery.bsod%
+%project php.jquery.aap%
+%project php.mysql.jquery.aap%
+%end%
+
+
+
+################################################################
+#
+# FILE TEMPLATES
+#
+
+
+#
+# .HTML FILES
+#
+
+%template .html bsod%
+$(tpl-html-bsod)
+
+%template .html aap%
+$(tpl-html-aap)
+
+%template .html bsod.jquery%
+$(tpl-html-bsod-jquery%
+
+%template .html aap.jquery%
+$(tpl-html-aap-jquery%)
+
+#
+# .PHP FILES
+#
+
+%template .php bsod%
+$(tpl-php-bsod)
+
+%template .php aap%
+$(tpl-php-aap)
+
+%template .php bsod.mysql%
+$(tpl-php-bsod-mysql)
+
+%template .php aap.mysql%
+$(tpl-php-aap-mysql)
+
+%template .php bsod.jquery%
+$(tpl-php-bsod-jquery%
+
+%template .php aap.jquery%
+$(tpl-php-aap-jquery)
+
+%template .php bsod.jquery.mysql%
+$(tpl-php-bsod-jquery-mysql)
+
+%template .php aap.jquery.mysql%
+$(tpl-php-aap-jqyery-mysql)
+
+%end%
+
+
+
+################################################################
+#
+# LINK SNIPPETS
+#
+
+
+%snippet tpl-html-bsod%
+%snippet tpl-html-aap%
+%end%
+%snippet tpl-html-bsod-jquery%
+%snippet tpl-html-aap-jquery%
+%end%
+
+
+%snippet tpl-php-bsod%
+%snippet tpl-php-aap%
+%end%
+%snippet tpl-php-bsod-mysql%
+%snippet tpl-php-aap-mysql%
+%end%
+%snippet tpl-php-bsod-jquery%
+%snippet tpl-php-aap-jquery%
+%end%
+%snippet tpl-php-bsod-jquery-mysql%
+%snippet tpl-php-aap-jquery-mysql%
+%end%
+
+# projects
+
+%snippet prj-index-html-bsod%
+%snippet prj-style-css-bsod%
+%end%
+%snippet prj-index-html-aap%
+%snippet prj-style-css-aap%
+%end%
+
+%snippet prj-index-html-bsod-jquery%
+%snippet prj-index-html-aap-jquery%
+%end%
+
+
+################################################################
+#
+# VERBATIM FILE SNIPPETS
+#
+
+
+%snippet _robots.txt%
+%end%
+
+%snippet _jquery.js%
+%end%
+
+
+################################################################
+#
+# BLOBS
+#
+
+%blob _bsod.ico%
+%end%
+
+%blob _aap.ico%
+%end%
+

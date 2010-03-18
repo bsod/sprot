@@ -1,0 +1,132 @@
+#
+# web.sprot - templates for web development
+#
+# projects:
+#
+# (html|php[.mysql])[.jquery]
+#
+# templates: 
+#
+# .html .php 
+# flavors: [jquery]
+# .php
+# flavors: [jquery[.mysql]]
+#
+
+
+
+%project html%
+%binary _bsod.ico favicon.ico%
+%file prj-index-html index.html%
+%file prj-style-css style.css%
+%file _robots.txt robots.txt%
+
+%project html.jquery%
+%binary _bsod.ico favicon.ico%
+%file prj-index-html-jquery index.html%
+%file prj-style-css style.css%
+%file _jquery.js jquery.js%
+%file _robots.txt robots.txt%
+
+%project php%
+%binary _bsod.ico favicon.ico%
+%file _robots.txt robots.txt%
+%file prj-index-php index.php
+
+%project php.mysql
+%project php.jquery%
+%project php.mysql.jquery%
+%end%
+
+
+
+################################################################
+#
+# FILE TEMPLATES
+#
+
+
+#
+# .HTML FILES
+#
+
+%template .html%
+$(tpl-html)
+
+%template .html jquery%
+$(tpl-html-jquery)
+
+
+#
+# .PHP FILES
+#
+
+%template .php%
+$(tpl-php)
+
+%template .php mysql%
+$(tpl-php-mysql)
+
+%template .php jquery%
+$(tpl-php-jquery%
+
+%template .php jquery.mysql%
+$(tpl-php-jquery-mysql)
+
+%end%
+
+
+
+################################################################
+#
+# LINK SNIPPETS
+#
+
+
+%snippet tpl-html%
+%end%
+%snippet tpl-html-jquery%
+%end%
+
+
+%snippet tpl-php%
+%end%
+%snippet tpl-php-mysql%
+%end%
+%snippet tpl-php-jquery%
+%end%
+%snippet tpl-php-jquery-mysql%
+%end%
+
+# projects
+
+%snippet prj-index-html%
+%snippet prj-style-css%
+%end%
+
+%snippet prj-index-html-jquery%
+%end%
+
+
+################################################################
+#
+# VERBATIM FILE SNIPPETS
+#
+
+
+%snippet _robots.txt%
+%end%
+
+%snippet _jquery.js%
+%end%
+
+
+################################################################
+#
+# BLOBS
+#
+
+%blob _bsod.ico%
+%end%
+
+
